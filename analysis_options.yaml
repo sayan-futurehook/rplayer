@@ -1,5 +1,8 @@
-include: package:pedantic/analysis_options.1.11.0.yaml
+include: package:flutter_lints/flutter.yaml
+
+# Additional information about this file can be found at
+# https://dart.dev/guides/language/analysis-options
 
 analyzer:
   exclude:
-    - lib/native_library.dart
+    - lib/rplayer_ffi.g.dart

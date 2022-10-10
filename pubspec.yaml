@@ -1,39 +1,61 @@
 name: rplayer
-description: RTSP low latency video player for Android TV.
+description: A new Flutter project.
 version: 0.0.1
-homepage: https://github.com/Autokaka/rplayer
+homepage:
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=1.20.0"
+  sdk: ">=2.18.0-10.0.dev <3.0.0"
+  flutter: ">=2.5.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  ffigen: ^3.0.0
+  flutter_web_plugins:
+    sdk: flutter
+  plugin_platform_interface: ^2.0.2
+  ffi: ^1.1.2
 
 dev_dependencies:
-  pedantic: ^1.11.0
+  flutter_lints: ^2.0.0
+  ffigen: ^4.1.3
 
 ffigen:
-  output: "lib/native_library.dart"
+  output: "lib/rplayer_ffi.g.dart"
   headers:
     entry-points:
-      - "src/ffi/ffi_export.h"
+      - "lib/cpp/include/rplayer/crplayer.h"
+  compiler-opts:
+    - "-Ilib/cpp/include"
+    - "-Ilib/cpp/src"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-# The following section is specific to Flutter.
+
+# The following section is specific to Flutter packages.
 flutter:
   # This section identifies this Flutter project as a plugin project.
-  # The 'pluginClass' and Android 'package' identifiers should not ordinarily
-  # be modified. They are used by the tooling to maintain consistency when
+  # The 'pluginClass' specifies the class (in Java, Kotlin, Swift, Objective-C, etc.)
+  # which should be registered in the plugin registry. This is required for
+  # using method channels.
+  # The Android 'package' specifies package in which the registered class is.
+  # This is required for using method channels on Android.
+  # The 'ffiPlugin' specifies that native code should be built and bundled.
+  # This is required for using `dart:ffi`.
+  # All these are used by the tooling to maintain consistency when
   # adding or updating assets for this project.
   plugin:
     platforms:
       android:
-        package: com.example.rplayer
-        pluginClass: RplayerPlugin
+        package: com.dshitpie.rplayer
+        pluginClass: RPlayerPlugin
+      ios:
+        pluginClass: RPlayerPlugin
+      windows:
+        pluginClass: RPlayerPluginCApi
+      web:
+        pluginClass: RPlayerWeb
+        fileName: rplayer_web.dart
+
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
@@ -43,7 +65,8 @@ flutter:
   # https://flutter.dev/assets-and-images/#from-packages
   #
   # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
+  # https://flutter.dev/assets-and-images/#resolution-aware
+
   # To add custom fonts to your plugin package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a

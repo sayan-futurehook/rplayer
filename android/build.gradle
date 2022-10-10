@@ -1,57 +1,50 @@
-group 'com.example.rplayer'
-version '1.0-SNAPSHOT'
+group 'com.dshitpie.rplayer'
+version '1.0'
 
 buildscript {
-    ext.kotlin_version = '1.4.20'
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.android.tools.build:gradle:7.1.2'
     }
 }
 
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     sourceSets {
         main {
-            java.srcDirs += 'src/main/kotlin'
-            jniLibs.srcDirs = ['../src/third-party/ffmpeg']
+            jniLibs.srcDirs = ['../lib/cpp/vendor/ffmpeg/android']
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 16
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a'
         }
-        externalNativeBuild {
-            cmake {
-                arguments "-DANDROID_ARM_NEON=TRUE", "-DANDROID_STL=c++_shared"
-            }
-        }
-        consumerProguardFiles "consumer-rules.pro"
     }
+
     externalNativeBuild {
         cmake {
-            path "../src/CMakeLists.txt"
+            path "../lib/cpp/CMakeLists.txt"
         }
     }
-}
-
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
